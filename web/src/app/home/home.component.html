@@ -1,0 +1,36 @@
+<div class="home d-flex">
+    <div class="menu col-md-3">        
+        <mat-card class="card">
+            <div class="title">
+                <mat-card-title class="d-flex">
+                    <span class="pt-1">{{ 'home.menu.title' | translate }}</span>
+                    <span class="app-spacer"></span>
+                    <button mat-icon-button class="add-tag" (click)="addNewTag()">
+                        <mat-icon>add</mat-icon>
+                    </button> 
+                </mat-card-title>
+            </div>
+            <div class="content">
+                <div class="list">
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let t of (tags | async)">
+                            {{ t.name }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="add-new-tag" *ngIf="isAddNew">                    
+                    <mat-form-field appearance="fill">
+                        <mat-label>New Tag...</mat-label>
+                        <input matInput [(ngModel)]="new_tag_name">
+                    </mat-form-field>
+                    <button mat-button color="primary" (click)="saveNewTag()">Save</button>
+                    <button mat-button color="warn" (click)="cancelNewTag()">Cancel</button>
+                </div>
+            </div>                
+        </mat-card>
+    </div>
+
+    <div class="col-md-9">
+        content
+    </div>
+</div>

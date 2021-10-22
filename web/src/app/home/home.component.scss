@@ -1,0 +1,17 @@
+.home {
+    padding: 20px 15px;
+
+    .menu {
+        padding: 15px;
+
+        .card {
+            background-color: lightblue;
+            
+            .add-tag {
+                width: 30px !important;
+                height: 30px !important;
+                line-height: 30px !important;
+            }
+        }
+    }    
+}
