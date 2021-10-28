@@ -6,4 +6,6 @@ export const selectTagState = createFeatureSelector<AppState, TagState>('tag');
 
 export const getTags = createSelector(selectTagState, (state: TagState) => state.tags);
 
-export const getAddSuccess = createSelector(selectTagState, (state: TagState) => state.add_success);
+export const getError = createSelector(selectTagState, (state: TagState) => state.error);
+
+export const getLoading = createSelector(selectTagState, (state: TagState) => state.isLoading);

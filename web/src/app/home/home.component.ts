@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { Tag } from '../config/interfaces';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 import { AppState } from '../store/app.state';
-import { Add, Fetch } from '../store/tags';
-import { getAddSuccess, getTags } from '../store/tags/tags.selectors';
+import { Add, Delete, Fetch, Update } from '../store/tags';
+import { getTags } from '../store/tags/tags.selectors';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +19,12 @@ export class HomeComponent implements OnInit {
 
   tags = this.store.select(getTags);
 
+  selectedTagId: string | undefined;
+  edit_new_name: string;
+
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    public dialog: MatDialog
   ) { 
     this.store.dispatch(new Fetch());
   }
@@ -31,9 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   saveNewTag(): void {
-    let newTag = {
-        name: this.new_tag_name
-    };
+    let newTag = { name: this.new_tag_name };
 
     this.store.dispatch(new Add(newTag));
 
@@ -43,6 +48,34 @@ export class HomeComponent implements OnInit {
   cancelNewTag(): void {
     this.new_tag_name = '';
     this.isAddNew = false;
+  }
+
+  deleteTag(tag: Tag) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+        width: '500px',
+        data: tag,
+        hasBackdrop: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        this.store.dispatch(new Delete(result.tagId));
+    });
+  }
+
+  editTag(tag: Tag) {
+    this.edit_new_name = tag.name;
+    this.selectedTagId = tag.tagId;
+  }
+
+  cancelEdit() {
+    this.selectedTagId = '';
+    this.edit_new_name = '';
+  }
+
+  saveTag() {
+    if (!this.edit_new_name || !this.selectedTagId) return;
+    this.store.dispatch(new Update({ tagId: this.selectedTagId, name: this.edit_new_name }));
+    this.cancelEdit();
   }
 
 }

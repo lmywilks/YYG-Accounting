@@ -1,5 +1,7 @@
 {
     "APP_NAME": "YYG - Accounting",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "home": {
         "menu": {
             "title": "Tags"
@@ -23,6 +25,11 @@
             "register": "Sign Up",
             "hasaccount": "Already have an account? ",
             "login": "Sign In"
+        }
+    },
+    "dialog": {
+        "delete": {
+            "title": "Are you sure you want to delete {{ name }}?"
         }
     }
 }

@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { Tag } from 'src/app/config/interfaces';
 
 export enum TagsActionType {
     ADD = '[Tags] Add',
@@ -8,22 +9,26 @@ export enum TagsActionType {
     FETCH_SUCCESS = '[Tags] Fetch Success',
     FETCH_FAILURE = '[Tags] Fetch Failure',
     UPDATE = '[Tags] Update',
-    DELETE = '[Tags] Delete'
+    UPDATE_SUCCESS = '[Tags] Update Success',
+    UPDATE_FAILURE = '[Tags] Update Failure',
+    DELETE = '[Tags] Delete',
+    DELETE_SUCCESS = '[Tags] Delete Success',
+    DELETE_FAILURE = '[Tags] Delete Failure'
 }
 
 export class Add implements Action {
     readonly type = TagsActionType.ADD;
-    constructor(public payload: any) {}
+    constructor(public tag: Tag) {}
 }
 
 export class AddSuccess implements Action {
     readonly type = TagsActionType.ADD_SUCCESS;
-    constructor(public payload: any) {}
+    constructor(public tag: Tag) {}
 }
 
 export class AddFailure implements Action {
     readonly type = TagsActionType.ADD_FAILURE;
-    constructor(public payload: any) {}
+    constructor(public error: any) {}
 }
 
 export class Fetch implements Action {
@@ -33,12 +38,12 @@ export class Fetch implements Action {
 
 export class FetchSuccess implements Action {
     readonly type = TagsActionType.FETCH_SUCCESS;
-    constructor(public payload: any) {}
+    constructor(public tags: Tag[]) {}
 }
 
 export class FetchFailure implements Action {
     readonly type = TagsActionType.FETCH_FAILURE;
-    constructor(public payload: any) {}
+    constructor(public error: any) {}
 }
 
 export class Update implements Action {
@@ -46,10 +51,29 @@ export class Update implements Action {
     constructor(public payload: any) {}
 }
 
+export class UpdateSuccess implements Action {
+    readonly type = TagsActionType.UPDATE_SUCCESS;
+    constructor(public payload: any) {}
+}
+
+export class UpdateFailure implements Action {
+    readonly type = TagsActionType.UPDATE_FAILURE;
+    constructor(public error: any) {}
+}
 
 export class Delete implements Action {
     readonly type = TagsActionType.DELETE;
+    constructor(public tagId: string) {}
+}
+
+export class DeleteSuccess implements Action {
+    readonly type = TagsActionType.DELETE_SUCCESS;
     constructor(public payload: any) {}
+}
+
+export class DeleteFailure implements Action {
+    readonly type = TagsActionType.DELETE_FAILURE;
+    constructor(public error: any) {}
 }
 
 export type ActionsUnion = 
@@ -60,4 +84,8 @@ export type ActionsUnion =
     FetchSuccess |
     FetchFailure |
     Update |
-    Delete;
+    UpdateSuccess |
+    UpdateFailure |
+    Delete |
+    DeleteSuccess |
+    DeleteFailure;

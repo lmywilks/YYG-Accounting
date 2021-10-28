@@ -20,11 +20,33 @@ export class AuthEffects {
         ofType(authAction.AuthActionType.LOGIN),
         map((action: authAction.Login) => action.payload),
         switchMap((payload: any) => {
+          localStorage.setItem('remember', JSON.stringify(payload.remember));
+          if (payload.remember) {
+            localStorage.setItem('password', payload.password);
+          }
           return this.authService.Login(payload.email, payload.password)
             .pipe(
               map(res => { return new authAction.LoginSuccess(res); }),
               catchError(err => { return of(new authAction.LoginFailure(err)); })
             );
+        })
+    )
+
+    @Effect({ dispatch: false })
+    LoginSuccess: Observable<any> = this.actions$.pipe(
+        ofType(authAction.AuthActionType.LOGIN_SUCCESS),
+        map((action: authAction.LoginSuccess) => action.payload.user),
+        switchMap((user: any) => {
+            localStorage.setItem('token', user.token);
+            const remember = localStorage.getItem('remember') === 'true' ? true : false;
+            if (remember) {
+                localStorage.setItem('email', user.email);
+            } else {
+                localStorage.removeItem('email');
+                localStorage.removeItem('password');
+            }
+
+            return this.router.navigateByUrl('', { replaceUrl: true });
         })
     )
 
@@ -35,18 +57,28 @@ export class AuthEffects {
         switchMap((payload: any) => {
             return this.authService.Register(payload as User)
               .pipe(
-                map(res => { return new authAction.RegisterSuccess(res); }),
+                map(res => { return new authAction.RegisterSuccess(res); }),                
                 catchError(err => { return of(new authAction.RegisterFailure(err)); })
               );
         })
     )
 
-    @Effect()
+    @Effect({ dispatch: false })
+    RegisterSuccess: Observable<any> = this.actions$.pipe(
+        ofType(authAction.AuthActionType.REGISTER_SUCCESS),
+        map((action: authAction.RegisterSuccess) => action.payload),
+        switchMap((payload: any) => {
+            localStorage.setItem('token', payload.token);
+            return this.router.navigateByUrl('', { replaceUrl: true });
+        })
+    )
+
+    @Effect({ dispatch: false })
     Logout: Observable<any> = this.actions$.pipe(
         ofType(authAction.AuthActionType.LOGOUT),
-        map(() => {
+        switchMap(() => {
             localStorage.removeItem('token');
-            this.router.navigateByUrl('/auth/login', { replaceUrl: true });
+            return this.router.navigateByUrl('/auth/login', { replaceUrl: true });
         })
     )
 }

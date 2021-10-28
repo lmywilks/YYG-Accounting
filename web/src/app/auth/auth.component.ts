@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AUTH_TYPE } from '../config/enum';
 import { AppState } from '../store/app.state';
-import { Register } from '../store/auth';
+import { Login, Register } from '../store/auth';
 
 @Component({
   selector: 'app-auth',
@@ -15,12 +15,12 @@ export class AuthComponent implements OnInit {
   readonly AUTH_TYPE = AUTH_TYPE;
   type: string;
 
-  loginForm: any = {
+  public loginForm: any = {
     email: '',
     password: '',
     remember: false
   };
-  registerForm: any = {
+  public registerForm: any = {
     email: '',
     username: '',
     password: ''
@@ -31,17 +31,24 @@ export class AuthComponent implements OnInit {
     private store: Store<AppState>
   ) {
     this.type = route.snapshot.url[0].path;
+    this.loginForm.remember = localStorage.getItem('remember') === 'true' ? true : false;
+    if (this.loginForm.remember) {
+        this.loginForm.email = localStorage.getItem('email') || '';
+        this.loginForm.password = localStorage.getItem('password') || '';
+    }
   }
 
   ngOnInit(): void {
   }
 
-  login(): void {}
+  login(): void {
+    if (!this.loginForm.email || !this.loginForm.password) return;
+
+    this.store.dispatch(new Login(this.loginForm));
+  }
 
   register(): void {
-    if (!this.registerForm.email || !this.registerForm.username || !this.registerForm.password) {
-        return;
-    }
+    if (!this.registerForm.email || !this.registerForm.username || !this.registerForm.password) return;
 
     this.store.dispatch(new Register(this.registerForm));
   }

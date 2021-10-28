@@ -11,10 +11,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
     NgbModule
   ],
   exports: [
@@ -37,7 +41,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
     NgbModule
+  ],
+  entryComponents: [
+    DialogComponent
   ]
 })
 export class SharedModule { }

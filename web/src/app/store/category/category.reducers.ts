@@ -1,85 +1,85 @@
-import { Tag } from "src/app/config/interfaces";
-import { TagsActionType, ActionsUnion } from "./tags.actions";
+import { Category } from "src/app/config/interfaces";
+import { CategoryActionType, ActionsUnion } from "./category.actions";
 
-export interface TagState {
+export interface CategoryState {
     isLoading: boolean;
     error: any;
     message: string;
-    tags: Tag[]
+    list: Category[]
 }
 
-export const initialTagState: TagState = {
+export const initialCategoryState: CategoryState = {
     isLoading: false,
-    tags: [],
+    list: [],
     message: '',
     error: null
 }
 
-export function tagReducer(state = initialTagState, action: ActionsUnion): TagState {
+export function categoryReducer(state = initialCategoryState, action: ActionsUnion): CategoryState {
     const cloneState = Object.assign({}, state);
 
     switch (action.type) {
-        case TagsActionType.ADD:
+        case CategoryActionType.ADD:
             cloneState.isLoading = true;
             cloneState.error = null;
             cloneState.message = '';
             return cloneState;
-        case TagsActionType.ADD_SUCCESS:
+        case CategoryActionType.ADD_SUCCESS:
             cloneState.isLoading = false;
-            cloneState.tags = [ ...cloneState.tags, action.tag ];
+            cloneState.list = [ ...cloneState.list, action.category ];
             return cloneState;
-        case TagsActionType.ADD_FAILURE:
+        case CategoryActionType.ADD_FAILURE:
             cloneState.isLoading = false;
             cloneState.error = action.error;
             return cloneState;
-        case TagsActionType.FETCH:
+        case CategoryActionType.FETCH:
             cloneState.isLoading = true;
             cloneState.error = null;
             cloneState.message = '';
             return cloneState;
-        case TagsActionType.FETCH_SUCCESS:
+        case CategoryActionType.FETCH_SUCCESS:
             cloneState.isLoading = false;
-            cloneState.tags = action.tags;
+            cloneState.list = action.list;
             return cloneState;
-        case TagsActionType.FETCH_FAILURE:
+        case CategoryActionType.FETCH_FAILURE:
             cloneState.isLoading = false;
             cloneState.error = action.error;
             return cloneState;
-        case TagsActionType.UPDATE:
+        case CategoryActionType.UPDATE:
             cloneState.error = null;
             cloneState.isLoading = true;
             cloneState.message = '';
             return cloneState;
-        case TagsActionType.UPDATE_SUCCESS:
+        case CategoryActionType.UPDATE_SUCCESS:
             cloneState.isLoading = false;
             cloneState.message = action.payload.message;
-            const index = cloneState.tags.findIndex(t => t['tagId'] === action.payload.tagId);
+            const index = cloneState.list.findIndex(c => c['categoryId'] === action.payload.categoryId);
             return { 
                 ...cloneState,
-                tags: [
-                    ...cloneState.tags.slice(0, index),
+                list: [
+                    ...cloneState.list.slice(0, index),
                     {
-                        ...cloneState.tags[index],
+                        ...cloneState.list[index],
                         name: action.payload.name
                     },
-                    ...cloneState.tags.slice(index + 1)
+                    ...cloneState.list.slice(index + 1)
                 ]
             };
-        case TagsActionType.UPDATE_FAILURE:
+        case CategoryActionType.UPDATE_FAILURE:
             cloneState.isLoading = false;
             cloneState.error = action.error;
             return cloneState;
-        case TagsActionType.DELETE:
+        case CategoryActionType.DELETE:
             cloneState.isLoading = true;
             cloneState.error = null;
             cloneState.message = '';
             return cloneState;
-        case TagsActionType.DELETE_SUCCESS:
+        case CategoryActionType.DELETE_SUCCESS:
             cloneState.isLoading = false;
             cloneState.message = action.payload.message;
-            cloneState.tags = cloneState.tags.filter(t => t.tagId !== action.payload.tagId);
+            cloneState.list = cloneState.list.filter(c => c.categoryId !== action.payload.categoryId);
             return cloneState;
-        case TagsActionType.DELETE_FAILURE:
+        case CategoryActionType.DELETE_FAILURE:
             cloneState.isLoading = false;
             cloneState.error = action.error;
             return cloneState;
